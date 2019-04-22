@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void displayGraph(int v, int *adj)
+void displayMatrix(int v, int *adj)
 {
     for (int i = 0; i < v; i++)
     {
@@ -12,6 +12,22 @@ void displayGraph(int v, int *adj)
             cout << *((adj + i * v) + j) << ' ';
         }
         cout << endl;
+    }
+}
+
+void displayGraph(int v, int *arr)
+{
+    for (int i = 0; i < v; i++)
+    {
+        cout << i << " --> ";
+        for (int j = 0; j < v; j++)
+        {
+            if (*((arr + i * v) + j) == 1 && i != j)
+            {
+                cout << j << " --> ";
+            }
+        }
+        cout << '\n';
     }
 }
 
@@ -47,9 +63,13 @@ int main()
         cin >> a >> b;
 
         // Assuming the graph is undirected.
-        adj[a-1][b-1] = 1;
-        adj[b-1][a-1] = 1;
+        adj[a][b] = 1;
+        adj[b][a] = 1;
     }
+
+    displayMatrix(v, *adj);
+    
+    cout << '\n';
 
     displayGraph(v, *adj);
 
