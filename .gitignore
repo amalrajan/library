@@ -1,2 +1,3 @@
 greedy/temp.cpp
-greedy/a.exe
+*.exe
+.vscode
