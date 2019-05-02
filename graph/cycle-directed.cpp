@@ -43,7 +43,7 @@ bool Graph::isCyclicUtil(int v, bool visited[], bool *recStack)
             }
             else if (recStack[i])
             {
-                return false;
+                return true;
             }
         }
     }
