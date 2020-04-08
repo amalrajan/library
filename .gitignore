@@ -1,0 +1,6 @@
+input.txt
+output.txt
+greedy/temp.cpp
+temp/*
+*.exe
+.vscode
