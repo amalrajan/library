@@ -5,11 +5,10 @@
 
 using namespace std;
 
-int freq[100005];
+int freq[100005] = {0};
 
 
 void count_sort(int arr[], int n) {
-    fill(freq, freq + 100005, 0);
     for (int i = 0; i < n; i++) freq[arr[i]] += 1;
 
     int i = 0, j = 0;
