@@ -1,39 +1,21 @@
-#include <iostream>
+#include <bits/stdc++.h>
+
+#define ll long long
+#define watch(x) cout << (#x) << " is " << (x) << endl
 
 using namespace std;
 
-void swap(int &a, int &b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}
+int arr[100005];
 
-int min(int a, int b) {
-    return a < b ? a : b;
-}
-
-void selection_sort(int arr[], int n) {
-    for (int i = 0; i < n; i++) {
-        int min_index = i;
-        for (int j = i+1; j < n; j++) {
-            if (arr[j] < arr[min_index]) {
-                min_index = j;
-            }
-        }
-        
-        if (i != min_index)
-            swap(arr[min_index], arr[i]);
-    }
-}
 
 int main() {
-    const int N = 5;
-    int arr[N] = {1, 5, 2, 8, 0};
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
-    selection_sort(arr, N);
-
-    for (int i = 0; i < N; i++) cout << arr[i] << ' ';
-    cout << endl;
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
 
     return 0;
 }
