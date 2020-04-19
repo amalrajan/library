@@ -1,4 +1,6 @@
-import sys; sys.stdin = open('input.txt', 'r'); sys.stdout = open('output.txt', 'w')
+import sys
+sys.stdin = open('input.txt', 'r')
+sys.stdout = open('output.txt', 'w')
 
 
 arr = list(map(float, input().split()))

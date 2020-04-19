@@ -1,4 +1,6 @@
-import sys; sys.stdin = open(sys.path[0] + '\\input.txt', 'r'); sys.stdout = open(sys.path[0] + '\\output.txt', 'w')
+import sys
+sys.stdin = open(sys.path[0] + '\\input.txt', 'r')
+sys.stdout = open(sys.path[0] + '\\output.txt', 'w')
 
 
 def simple_sieve():
@@ -18,14 +20,14 @@ def segmented_sieve(a, b):
     nsqrt = int(b ** 0.5)
     if a == 1:
         a += 1
-    
+
     for p in primes:
         if p > nsqrt:
             break
-        j = p * p  
+        j = p * p
         if j < a:
             j = ((a + p - 1) // p) * p
-        
+
         while j <= b:
             mark[j - a] = True
             j += p
