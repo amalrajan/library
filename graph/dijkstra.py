@@ -38,11 +38,12 @@ while pq:
     visited[u] = True
 
     for i in graph[u]:
-        if not visited[i[0]]:
-            temp_dist = distance[u] + i[1]
-            if temp_dist < distance[i[0]]:
-                distance[i[0]] = temp_dist
-                previous[i[0]] = u
+        node, dist = i[0], i[1]
+        if not visited[node]:
+            temp_dist = distance[u] + dist
+            if temp_dist < distance[node]:
+                distance[node] = temp_dist
+                previous[node] = u
 
 print(distance)
 print(previous)
