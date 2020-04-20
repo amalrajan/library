@@ -1,6 +1,6 @@
 def dsu_root(i):
     while arr[i] != i:
-        i = arr[i]
+        i = arr[arr[i]]
     return i
 
 
