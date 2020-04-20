@@ -1,54 +1,55 @@
-def find(x):
-    if parent[x] == x:
-        return x
-    return find(parent[x])
+import sys
+from collections import defaultdict
 
 
-def union(x, y):
-    xroot = find(x)
-    yroot = find(y)
+try:
+    sys.stdin = open(sys.path[0] + '\\input.txt', 'r')
+    sys.stdout = open(sys.path[0] + '\\output.txt', 'w')
+except FileNotFoundError:
+    pass
 
-    if rank[xroot] < rank[yroot]:
-        parent[xroot] = yroot
-    elif rank[xroot] > rank[yroot]:
-        parent[yroot] = xroot
+
+def dsu_root(i):
+    while arr[i] != i:
+        i = arr[arr[i]]
+    return i
+
+
+def dsu_find(a, b):
+    return dsu_root(a) == dsu_root(b)
+
+
+def dsu_weighted_union(a, b):
+    root_a = dsu_root(a)
+    root_b = dsu_root(b)
+
+    if szarr[root_a] > szarr[root_b]:
+        arr[root_b] = arr[root_a]
+        szarr[root_a] += szarr[root_b]
     else:
-        parent[yroot] = xroot
-        rank[xroot] += 1
+        arr[root_a] = arr[root_b]
+        szarr[root_b] += szarr[root_a]
 
 
-def kruskal(graph, nodes):
-    result = []
+v, e = list(map(int, input().split()))
+edges = []
 
-    i = 0
-    e = 0
+for i in range(e):
+    a, b, w = list(map(int, input().split()))
+    edges.append((a, b, w))
 
-    graph = sorted(graph, key=lambda item: item[2])
+edges.sort(key=lambda a: a[2])
+arr = [*range(v)]
+szarr = [1] * v
 
-    while e < nodes - 1:
-        u, v, w = graph[i]
-        i = i + 1
+graph = defaultdict(list)
+for (a, b, w) in edges:
+    if dsu_find(a, b):
+        continue
 
-        x = find(u)
-        y = find(v)
+    dsu_weighted_union(a, b)
+    graph[a].append((b, w))
+    graph[b].append((a, w))
 
-        if x != y:
-            e += 1
-            result.append([u, v, w])
-            union(x, y)
-
-    for edge in result:
-        print(edge)
-
-
-nodes, edges = list(map(int, input().split()))
-
-parent = list(range(nodes))
-rank = [0] * nodes
-graph = []
-
-for i in range(edges):
-    u, v, w = list(map(int, input().split()))
-    graph.append([u, v, w])
-
-kruskal(graph, nodes)
+for i in graph:
+    print(i, '-->', *graph[i])
