@@ -11,39 +11,48 @@ except FileNotFoundError:
     pass
 
 
-v, e = list(map(int, input().split()))
-s = int(input()) # Source vertex
-graph = defaultdict(list)
+def add_edge(x, y, wt):
+    # Undirected graph
+    graph[x].add((y, wt))
+    graph[y].add((x, wt))
 
-for i in range(e):
-    src, dest, cost = list(map(int, input().split()))
-    graph[src].append((dest, cost))
+graph = defaultdict(set)
 
+add_edge(0, 1, 4); 
+add_edge(0, 7, 8); 
+add_edge(1, 2, 8); 
+add_edge(1, 7, 11); 
+add_edge(2, 3, 7); 
+add_edge(2, 8, 2); 
+add_edge(2, 5, 4); 
+add_edge(3, 4, 9); 
+add_edge(3, 5, 14); 
+add_edge(4, 5, 10); 
+add_edge(5, 6, 2); 
+add_edge(6, 7, 1); 
+add_edge(6, 8, 6); 
+add_edge(7, 8, 7); 
 
 # Dijkstra's single source shortest path
-distance = [math.inf] * v
-previous = [None] * v
-visited = [False] * v
 
-distance[s] = 0
-visited[s] = True
+v = 9
+src = 0
 
-pq = [*range(v)]
+pq = []
+dist = [math.inf] * v
 heapq.heapify(pq)
 
-print(pq)
+heapq.heappush(pq, (0, src))
+dist[src] = 0
 
 while pq:
-    u = heapq.heappop(pq)
-    visited[u] = True
+    x = heapq.heappop(pq)[1]
 
-    for i in graph[u]:
-        node, dist = i[0], i[1]
-        if not visited[node]:
-            temp_dist = distance[u] + dist
-            if temp_dist < distance[node]:
-                distance[node] = temp_dist
-                previous[node] = u
+    for i in graph[x]:
+        y, wt = i
+        if dist[y] > dist[x] + wt:
+            dist[y] = dist[x] + wt
+            heapq.heappush(pq, (dist[y], y))
 
-print(distance)
-print(previous)
+for i in range(v):
+    print(i, dist[i])
