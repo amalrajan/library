@@ -1,159 +1,161 @@
+import sys
+
+
+try:
+    sys.stdin = open(sys.path[0] + '/input.txt', 'r')
+    sys.stdout = open(sys.path[0] + '/output.txt', 'w')
+except FileNotFoundError:
+    pass
+
+
 class Node:
-    def __init__(self, key):
-        self.key = key
-        self.next = None
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 
 class SingleLinkedList:
     def __init__(self):
         self.head = None
 
-    def insert_start(self, key):
-        new_node = Node(key)
+    def insert_start(self, val):
+        new_node = Node(val)
         new_node.next = self.head
         self.head = new_node
 
-    def insert_end(self, key):
-        if self.head is None:
-            self.head = Node(key)
+    def insert_end(self, val):
+        if not self.head:
+            self.head = Node(val)
         else:
             curr = self.head
-            while curr.next is not None:
+            while curr.next:
                 curr = curr.next
-            curr.next = Node(key)
+            curr.next = Node(val)
 
-    def insert_pos(self, key, pos):
-        '''
-        Indexing starts from 1.
-        '''
-        if self.head is None or pos == 1:
-            self.insert_start(key)
+    def insert_pos(self, val, pos):
+        # Indexing starts from 1
+        if not self.head or pos == 1:
+            new_node = Node(val)
+            new_node.next = self.head
+            self.head = new_node
         else:
-            prev = self.head
-            itr = 1
-            while itr < pos - 1 and prev is not None:
-                prev = prev.next
-                itr += 1
+            curr = self.head
+            ptr = 1
 
-            if prev is None:
-                print("Invalid position.")
-            elif itr == pos - 1:
-                new_node = Node(key)
-                new_node.next = prev.next
-                prev.next = new_node
+            while ptr < pos - 1 and curr:
+                curr = curr.next
+                ptr += 1
+
+            if not curr:
+                print('Index out of bounds')
+                return
+            
+            new_node = Node(val, next=curr.next)
+            curr.next = new_node
 
     def delete_key(self, key):
-        if self.head is None:
-            print("List empty.")
-            return
-        if self.head.key == key:
-            self.head = self.head.next
-            return
         curr = self.head
         prev = None
-        while curr.key != key and curr is not None:
+        
+        if curr.val == key:
+            self.head = self.head.next
+            return
+
+        while curr and curr.val != key:
             prev = curr
             curr = curr.next
         prev.next = curr.next
 
+
     def delete_pos(self, pos):
-        if self.head is None:
-            print("List empty.")
-            return
-        if pos == 0:
+        curr = self.head
+        if pos == 1:
             self.head = self.head.next
             return
-        curr = self.head
-        prev = None
-        itr = 0
-        while curr is not None and itr < pos:
-            prev = curr
+        
+        ptr = 1
+        while curr and ptr < pos - 1:
             curr = curr.next
-            itr += 1
-        if curr is None:
-            print("Invalid position")
-            return
-        elif itr == pos:
-            prev.next = curr.next
+            ptr += 1
+        curr.next = curr.next.next
 
     def get_length(self):
-        length = 0
         curr = self.head
-        while curr is not None:
-            curr = curr.next
+        length = 0
+        while curr:
             length += 1
+            curr = curr.next
+        
         return length
 
     def get_length_recursive(self, root):
-        if root is None:
+        if not root:
             return 0
         return 1 + self.get_length_recursive(root.next)
 
-    def get_nth_from_end(self, n):
-        '''
-        Indexing starts from 1.
-        '''
-        if self.head is None:
-            print("List empty.")
-            return
-        ref_ptr = self.head
-        main_ptr = self.head
-        i = 0
-        while i < n and ref_ptr is not None:
-            ref_ptr = ref_ptr.next
-            i += 1
-        if ref_ptr is None:
-            print("Invalid position")
-            return
-        while ref_ptr is not None:
-            ref_ptr = ref_ptr.next
-            main_ptr = main_ptr.next
-
-        return main_ptr.key
+    def n_th_from_end(self, n):
+        if not self.head:
+            return None
+        
+        refptr = self.head
+        mainptr = self.head
+        
+        for i in range(n):
+            if refptr:
+                refptr = refptr.next
+            else:
+                print('Index out of bounds')
+                return
+        
+        while refptr:
+            mainptr = mainptr.next
+            refptr = refptr.next
+        
+        return mainptr.val
 
     def get_middle(self):
-        if self.head is None:
-            print("List empty.")
-            return
-        ref_ptr = self.head
-        main_ptr = self.head
+        slow = self.head
+        fast = self.head
 
-        while ref_ptr and ref_ptr.next:
-            ref_ptr = ref_ptr.next.next
-            main_ptr = main_ptr.next
+        while slow and fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
 
-        return main_ptr.key
+        return slow.val
 
     def detect_loop_hashing(self):
-        if self.head is None:
-            return
-        hashset = set()
+        hset = set()
         curr = self.head
+
         while curr:
-            if curr in hashset:
+            if curr.val in hset:
                 return True
-            hashset.add(curr)
+            hset.add(curr.val)
             curr = curr.next
-        return False
+
+        if not curr:
+            return False
 
     def detect_loop_floyd(self):
-        if self.head is None:
+        if not self.head:
             return
-        slow_ptr = self.head
-        fast_ptr = self.head
 
-        while slow_ptr and fast_ptr and fast_ptr.next:
-            slow_ptr = slow_ptr.next
-            fast_ptr = fast_ptr.next.next
+        slow = self.head
+        fast = self.head
+        
+        while slow and fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
 
-            if slow_ptr == fast_ptr:
+            if slow == fast:
                 return True
+
         return False
 
     def display(self):
         curr = self.head
         while curr:
-            print(curr.key, end=' ')
+            print(curr.val, end=' ')
             curr = curr.next
         print()
 
@@ -162,10 +164,17 @@ sll = SingleLinkedList()
 sll.insert_start(1)
 sll.insert_start(2)
 sll.insert_start(3)
-sll.insert_end(4)
-sll.insert_end(5)
-sll.insert_pos(33, 3)
 
 sll.display()
 
+sll.insert_end(4)
+sll.insert_end(5)
+
+sll.display()
+
+sll.delete_pos(5)
+sll.display()
+
+print(sll.n_th_from_end(4))
 print(sll.get_middle())
+print(sll.detect_loop_hashing())
