@@ -10,7 +10,7 @@ except FileNotFoundError:
 
 class MaxHeap:
     def __init__(self):
-        self.heap = []
+        self.A = []
 
     def parent(self, i):
         return (i - 1) // 2
@@ -20,52 +20,51 @@ class MaxHeap:
         right = 2 * i + 2
         largest = i
 
-        if left < len(self.heap) and self.heap[left] > self.heap[i]:
-            largest = i
-        elif right < len(self.heap) and self.heap[right] > self.heap[i]:
-            largest = i
+        if left < len(self.A) and self.A[left] > self.A[i]:
+            largest = left
+        elif right < len(self.A) and self.A[right] > self.A[largest]:
+            largest = right
 
         if largest != i:
-            self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
-            self.heapify_down(largest)
+            self.A[i], self.A[largest] = self.A[largest], self.A[i]
+            self.heapify_down(largest)s
 
     def heapify_up(self, i):
         par = self.parent(i)
-        if i and self.heap[par] < self.heap[i]:
-            self.heap[i], self.heap[par] = self.heap[par], self.heap[i]
+        if i and self.A[par] < self.A[i]:
+            self.A[i], self.A[par] = self.A[par], self.A[i]
             self.heapify_up(par)
 
     def empty(self):
-        return self.heap == []
+        return self.A == []
 
     def heap_push(self, key):
-        self.heap.append(key)
-        self.heapify_up(len(self.heap) - 1)
+        self.A.append(key)
+        self.heapify_up(len(self.A) - 1)
 
     def heap_pop(self):
-        if not self.heap:
+        if not self.A:
             return 
 
-        self.heap[0] = self.heap[-1]
-        self.heap.pop()
+        self.A[0] = self.A[-1]
+        self.A.pop()
         self.heapify_down(0)
 
     def top(self):
-        if not self.heap:
+        if not self.A:
             return
         
-        return self.heap[0]
+        return self.A[0]
 
 
 pq = MaxHeap()
 pq.heap_push(2)
 pq.heap_push(3)
-
-print(pq.top())
-
-pq.heap_push(5)
+pq.heap_push(1)
 print(pq.top())
 
 pq.heap_pop()
+print(pq.top())
+
 pq.heap_pop()
 print(pq.top())
