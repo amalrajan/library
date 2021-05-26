@@ -23,4 +23,6 @@ for i in range(e):
     adj[a].append(b)
     adj[b].append(a)
 
-bfs(0)
+for i in range(v):
+    if not visited[i]:
+        bfs(i)
