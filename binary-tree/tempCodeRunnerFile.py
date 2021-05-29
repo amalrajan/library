@@ -1,0 +1,1 @@
+(node.left is None and node.right is None)

@@ -13,17 +13,17 @@ for _ in range(int(input())):
     arr = list(map(int, input().split()))
 
     res = [0] * n
-    s = []
+    stack = []
 
     for i in range(n - 1, -1, -1):
-        while s and s[-1] <= arr[i]:
-            s.pop()
+        while stack and stack[-1] <= arr[i]:
+            stack.pop()
         
-        if not s:
+        if not stack:
             res[i] = -1
         else:
-            res[i] = s[-1]
+            res[i] = stack[-1]
         
-        s.append(arr[i])
+        stack.append(arr[i])
     
     print(*res)
